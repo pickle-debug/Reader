@@ -11,11 +11,11 @@ enum PlayMode: CaseIterable {
     var description: String {
         switch self {
         case .listLoop:
-            return "列表循环"
+            return "列表"
         case .random:
-            return "随机播放"
+            return "随机"
         case .singleLoop:
-            return "单曲循环"
+            return "单曲"
         }
     }
     
@@ -294,5 +294,121 @@ class TextViewModel: ObservableObject {
     var currentText: String {
         guard currentTrackIndex < textModels.count else { return "" }
         return textModels[currentTrackIndex].text
+    }
+    
+    // MARK: - Text Management Methods
+    
+    func deleteText(at index: Int) {
+        guard index < textModels.count else { return }
+        
+        let textModel = textModels[index]
+        
+        // 删除音频文件
+        let audioService = AudioService.shared
+        let filePath = audioService.getAudioFilePath(for: textModel.uuid)
+        try? FileManager.default.removeItem(at: filePath)
+        
+        // 从Realm中删除
+        guard let realm = realm else { return }
+        
+        do {
+            try realm.write {
+                realm.delete(textModel)
+            }
+            
+            // 从数组中删除
+            textModels.remove(at: index)
+            
+            // 更新选中的索引
+            var newSelectedTexts: Set<Int> = []
+            for selectedIndex in selectedTexts {
+                if selectedIndex < index {
+                    newSelectedTexts.insert(selectedIndex)
+                } else if selectedIndex > index {
+                    newSelectedTexts.insert(selectedIndex - 1)
+                }
+            }
+            selectedTexts = newSelectedTexts
+            
+            // 更新当前播放索引
+            if currentTrackIndex == index {
+                currentTrackIndex = 0
+            } else if currentTrackIndex > index {
+                currentTrackIndex -= 1
+            }
+            
+        } catch {
+            print("Failed to delete text from Realm: \(error)")
+        }
+    }
+    
+    func updateText(at index: Int, newText: String) {
+        guard index < textModels.count else { return }
+        
+        let textModel = textModels[index]
+        
+        guard let realm = realm else { return }
+        
+        do {
+            try realm.write {
+                textModel.text = newText
+                textModel.updateTime = Date()
+            }
+            
+            // 更新数组
+            textModels[index] = textModel
+            
+        } catch {
+            print("Failed to update text in Realm: \(error)")
+        }
+    }
+    
+    func moveText(from sourceIndex: IndexSet, to destination: Int) {
+        guard let fromIndex = sourceIndex.first else { return }
+        
+        // 更新数组顺序
+        let movedText = textModels.remove(at: fromIndex)
+        textModels.insert(movedText, at: destination)
+        
+        // 更新Realm中的顺序（通过重新创建）
+        guard let realm = realm else { return }
+        
+        do {
+            try realm.write {
+                // 删除所有现有对象
+                realm.deleteAll()
+                
+                // 重新添加按新顺序排列的对象
+                for textModel in textModels {
+                    realm.add(textModel)
+                }
+            }
+        } catch {
+            print("Failed to reorder texts in Realm: \(error)")
+        }
+        
+        // 更新选中的索引
+        var newSelectedTexts: Set<Int> = []
+        for selectedIndex in selectedTexts {
+            if selectedIndex == fromIndex {
+                newSelectedTexts.insert(destination)
+            } else if selectedIndex < fromIndex && selectedIndex >= destination {
+                newSelectedTexts.insert(selectedIndex + 1)
+            } else if selectedIndex > fromIndex && selectedIndex <= destination {
+                newSelectedTexts.insert(selectedIndex - 1)
+            } else {
+                newSelectedTexts.insert(selectedIndex)
+            }
+        }
+        selectedTexts = newSelectedTexts
+        
+        // 更新当前播放索引
+        if currentTrackIndex == fromIndex {
+            currentTrackIndex = destination
+        } else if currentTrackIndex < fromIndex && currentTrackIndex >= destination {
+            currentTrackIndex += 1
+        } else if currentTrackIndex > fromIndex && currentTrackIndex <= destination {
+            currentTrackIndex -= 1
+        }
     }
 }

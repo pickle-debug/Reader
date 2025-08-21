@@ -54,9 +54,9 @@ struct NowPlayingView: View {
             }
         }
         .padding(20)
-        .background(Color(.systemBackground))
+        .background(Color.white.opacity(0.9))
         .cornerRadius(16)
-        .shadow(radius: 5)
+        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
     }
 }
 

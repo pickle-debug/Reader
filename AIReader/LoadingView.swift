@@ -29,9 +29,9 @@ struct LoadingView: View {
                 .multilineTextAlignment(.center)
         }
         .padding(30)
-        .background(Color(.systemBackground))
+        .background(Color.white.opacity(0.95))
         .cornerRadius(16)
-        .shadow(radius: 10)
+        .shadow(color: Color.black.opacity(0.15), radius: 15, x: 0, y: 8)
         .onAppear {
             isAnimating = true
         }
