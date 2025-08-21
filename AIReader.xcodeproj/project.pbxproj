@@ -6,12 +6,32 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		DC8C9C492E56B42E0012DFEB /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = DC8C9C482E56B42E0012DFEB /* Alamofire */; };
+		DC8C9C7F2E56B9680012DFEB /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DC8C9C7E2E56B9680012DFEB /* RealmSwift */; };
+		DC8C9C802E56B9E40012DFEB /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = DC8C9C7E2E56B9680012DFEB /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DC8C9C812E56B9E40012DFEB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				DC8C9C802E56B9E40012DFEB /* RealmSwift in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		DCB493702E5565B6001B2522 /* read.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = read.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		DCB493822E5565B8001B2522 /* Exceptions for "read" folder in "read" target */ = {
+		DC8C9C2C2E56B37F0012DFEB /* Exceptions for "AIReader" folder in "read" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -21,12 +41,12 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		DCB493722E5565B6001B2522 /* read */ = {
+		DCB493722E5565B6001B2522 /* AIReader */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				DCB493822E5565B8001B2522 /* Exceptions for "read" folder in "read" target */,
+				DC8C9C2C2E56B37F0012DFEB /* Exceptions for "AIReader" folder in "read" target */,
 			);
-			path = read;
+			path = AIReader;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -36,6 +56,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC8C9C7F2E56B9680012DFEB /* RealmSwift in Frameworks */,
+				DC8C9C492E56B42E0012DFEB /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,7 +67,7 @@
 		DCB493672E5565B6001B2522 = {
 			isa = PBXGroup;
 			children = (
-				DCB493722E5565B6001B2522 /* read */,
+				DCB493722E5565B6001B2522 /* AIReader */,
 				DCB493712E5565B6001B2522 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -68,16 +90,19 @@
 				DCB4936C2E5565B6001B2522 /* Sources */,
 				DCB4936D2E5565B6001B2522 /* Frameworks */,
 				DCB4936E2E5565B6001B2522 /* Resources */,
+				DC8C9C812E56B9E40012DFEB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				DCB493722E5565B6001B2522 /* read */,
+				DCB493722E5565B6001B2522 /* AIReader */,
 			);
 			name = read;
 			packageProductDependencies = (
+				DC8C9C482E56B42E0012DFEB /* Alamofire */,
+				DC8C9C7E2E56B9680012DFEB /* RealmSwift */,
 			);
 			productName = read;
 			productReference = DCB493702E5565B6001B2522 /* read.app */;
@@ -98,7 +123,7 @@
 					};
 				};
 			};
-			buildConfigurationList = DCB4936B2E5565B6001B2522 /* Build configuration list for PBXProject "read" */;
+			buildConfigurationList = DCB4936B2E5565B6001B2522 /* Build configuration list for PBXProject "AIReader" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -107,6 +132,10 @@
 			);
 			mainGroup = DCB493672E5565B6001B2522;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				DC8C9C472E56B42E0012DFEB /* XCRemoteSwiftPackageReference "Alamofire" */,
+				DC8C9C7D2E56B9680012DFEB /* XCRemoteSwiftPackageReference "realm-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DCB493712E5565B6001B2522 /* Products */;
 			projectDirPath = "";
@@ -146,13 +175,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = K3ZFZ6NBNT;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = read/Info.plist;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AIReader/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = AIReader;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -174,13 +201,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = K3ZFZ6NBNT;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = read/Info.plist;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AIReader/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = AIReader;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -318,7 +343,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		DCB4936B2E5565B6001B2522 /* Build configuration list for PBXProject "read" */ = {
+		DCB4936B2E5565B6001B2522 /* Build configuration list for PBXProject "AIReader" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DCB493862E5565B8001B2522 /* Debug */,
@@ -337,6 +362,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DC8C9C472E56B42E0012DFEB /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+		DC8C9C7D2E56B9680012DFEB /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DC8C9C482E56B42E0012DFEB /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DC8C9C472E56B42E0012DFEB /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		DC8C9C7E2E56B9680012DFEB /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DC8C9C7D2E56B9680012DFEB /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DCB493682E5565B6001B2522 /* Project object */;
 }

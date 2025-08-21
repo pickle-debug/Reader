@@ -1,118 +1,81 @@
-# AI配音生成器
+# AIReader - AI配音生成器
 
-一个基于SwiftUI开发的iOS应用，允许用户输入文本并生成AI配音，支持多种播放模式。
+一个基于SwiftUI的iOS应用，支持文本转语音(TTS)功能，使用Realm进行本地数据存储。
 
 ## 功能特性
 
-### 🎯 核心功能
-- **文本输入**: 支持用户输入多段英文文本
-- **文本选择**: 可以选择特定的文本段落进行AI配音生成
-- **AI配音生成**: 为选中的文本生成AI配音
-- **播放控制**: 支持播放、暂停、上一首、下一首等基本控制
+### 数据存储
+- 使用Realm数据库进行本地存储
+- 文本数据结构：`uuid`, `text`, `mp3file`, `createTime`, `updateTime`
+- 音频文件以UUID命名存储在应用文档目录
 
-### 🎵 播放模式
-- **列表循环**: 按顺序循环播放所有选中的文本
-- **随机播放**: 随机播放选中的文本
-- **单曲循环**: 重复播放当前文本
-
-### 🎨 界面设计
-- **现代化UI**: 采用苹果设计风格，界面简洁美观
-- **响应式设计**: 适配不同尺寸的iOS设备
-- **流畅动画**: 包含加载动画和播放状态指示器
-- **空状态处理**: 当没有文本时显示友好的提示界面
-
-## 技术架构
-
-### 开发框架
-- **SwiftUI**: 使用SwiftUI构建用户界面
-- **MVVM架构**: 采用Model-View-ViewModel设计模式
-- **Combine**: 用于数据绑定和状态管理
-
-### 核心组件
-- `ContentView`: 主界面视图
-- `TextViewModel`: 业务逻辑处理
-- `TextInputView`: 文本输入界面
-- `EmptyStateView`: 空状态显示
-- `LoadingView`: 加载状态显示
-- `NowPlayingView`: 当前播放信息显示
-
-## 项目结构
-
-```
-read/
-├── read/
-│   ├── ContentView.swift          # 主界面
-│   ├── TextViewModel.swift        # 业务逻辑
-│   ├── TextInputView.swift        # 文本输入
-│   ├── EmptyStateView.swift       # 空状态
-│   ├── LoadingView.swift          # 加载状态
-│   ├── NowPlayingView.swift       # 播放信息
-│   ├── readApp.swift              # 应用入口
-│   ├── SceneDelegate.swift        # 场景代理
-│   ├── Info.plist                 # 应用配置
-│   └── Assets.xcassets/           # 资源文件
-└── read.xcodeproj/                # Xcode项目文件
-```
-
-## 使用说明
-
-### 添加文本
-1. 点击右上角的 "+" 按钮
-2. 在文本输入框中输入英文文本
-3. 点击"添加文本"按钮保存
-
-### 选择文本
-1. 在文本列表中点击要选择的文本项
-2. 选中的文本会显示蓝色边框和勾选标记
-3. 可以点击"清除选择"按钮取消所有选择
-
-### 生成AI配音
-1. 选择要生成配音的文本
-2. 点击底部的"生成AI配音"按钮
-3. 等待AI生成完成（显示加载动画）
+### 音频生成
+- 集成TTS API：`https://tts-voice-magic.1941109171.workers.dev/v1/audio/speech`
+- 支持批量音频生成
+- 自动检查本地音频文件，避免重复生成
+- 使用Alamofire进行网络请求
 
 ### 播放控制
-- **播放/暂停**: 点击中间的播放按钮
-- **上一首/下一首**: 点击左右箭头按钮
-- **播放模式**: 点击播放模式按钮切换（列表循环/随机播放/单曲循环）
+- 支持列表循环、随机播放、单曲循环
+- 实时播放进度显示
+- 上一首/下一首切换
 
-## 系统要求
+## 技术栈
 
-- iOS 15.6+
-- Xcode 14.0+
-- Swift 5.7+
+- **SwiftUI**: 用户界面框架
+- **Realm**: 本地数据库
+- **Alamofire**: 网络请求库
+- **AVFoundation**: 音频播放
+
+## 数据模型
+
+```swift
+class TextModel: Object {
+    @Persisted(primaryKey: true) var uuid: String
+    @Persisted var text: String
+    @Persisted var mp3file: String
+    @Persisted var createTime: Date
+    @Persisted var updateTime: Date
+}
+```
+
+## 使用方法
+
+1. 添加文本：点击"+"按钮添加新的文本
+2. 选择文本：点击文本项进行选择
+3. 生成音频：点击"生成AI配音"按钮
+4. 播放控制：使用播放控制按钮进行播放、暂停、切换
+
+## API配置
+
+TTS API请求格式：
+```json
+{
+  "input": "文本内容",
+  "voice": "en-US-JennyNeural",
+  "speed": 1.0,
+  "pitch": "0",
+  "style": "general"
+}
+```
+
+## 文件结构
+
+- `TextModel.swift`: Realm数据模型
+- `AudioService.swift`: 音频服务和TTS API集成
+- `TextViewModel.swift`: 主要业务逻辑
+- `ContentView.swift`: 主界面
 
 ## 安装和运行
 
-1. 克隆项目到本地
-2. 使用Xcode打开 `read.xcodeproj`
+1. 克隆项目
+2. 在Xcode中打开`AIReader.xcodeproj`
 3. 选择目标设备或模拟器
-4. 点击运行按钮或按 `Cmd+R`
+4. 运行项目
 
-## 开发说明
+## 注意事项
 
-### 架构设计
-项目采用MVVM架构模式：
-- **Model**: 数据模型和业务逻辑
-- **View**: SwiftUI视图组件
-- **ViewModel**: 连接View和Model的中间层
-
-### 状态管理
-使用`@StateObject`和`@Published`进行状态管理，确保UI与数据同步更新。
-
-### 兼容性
-项目针对iOS 15.6+进行了优化，确保在较旧的iOS版本上也能正常运行。
-
-## 未来计划
-
-- [ ] 集成真实的AI配音API
-- [ ] 添加音频文件管理功能
-- [ ] 支持更多语言
-- [ ] 添加语音设置选项
-- [ ] 实现音频导出功能
-- [ ] 添加播放历史记录
-
-## 许可证
-
-本项目仅供学习和演示使用。
-# Reader
+- 首次运行时会自动添加示例文本
+- 音频文件存储在应用的Documents目录
+- 网络请求需要网络连接
+- 音频生成可能需要一些时间，请耐心等待
