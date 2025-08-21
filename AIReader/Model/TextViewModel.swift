@@ -67,7 +67,7 @@ class TextViewModel: ObservableObject {
     
     func addText(_ text: String) {
         let uuid = UUID().uuidString
-        let paragraph = ParagraphModel(uuid: uuid, text: text, mp3file: "\(uuid).mp3")
+        let paragraph = ParagraphModel(uuid: uuid, text: text)
         
         guard let realm = realm else { return }
         

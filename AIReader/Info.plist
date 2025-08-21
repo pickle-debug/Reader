@@ -9,7 +9,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.heself.read</string>
 	<key>CFBundleName</key>
-	<string>AI配音生成器</string>
+	<string>Whisper耳语</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

@@ -177,7 +177,7 @@
 				DEVELOPMENT_TEAM = K3ZFZ6NBNT;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = AIReader/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = AIReader;
+				INFOPLIST_KEY_CFBundleDisplayName = "Whisper耳语";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -203,7 +203,7 @@
 				DEVELOPMENT_TEAM = K3ZFZ6NBNT;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = AIReader/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = AIReader;
+				INFOPLIST_KEY_CFBundleDisplayName = "Whisper耳语";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (

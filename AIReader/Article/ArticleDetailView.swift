@@ -30,9 +30,9 @@ struct ArticleDetailView: View {
                                     .fontWeight(.bold)
                                     .foregroundColor(.primary)
                                 
-                                Text("\(article.paragraphCount) 段落 · \(article.voiceCount) 音色")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
+//                                Text("\(article.paragraphCount) 段落 · \(article.voiceCount) 音色")
+//                                    .font(.caption)
+//                                    .foregroundColor(.secondary)
                             }
                             
                             Spacer()
@@ -92,19 +92,19 @@ struct ArticleDetailView: View {
                         ScrollView {
                             LazyVStack(spacing: 16) {
                                 ForEach(Array(detailViewModel.paragraphs.enumerated()), id: \.element.uuid) { index, paragraph in
-                                    ParagraphCardView(
-                                        paragraph: paragraph,
-                                        index: index,
-                                        onEdit: {
-                                            detailViewModel.editParagraph(at: index)
-                                        },
-                                        onDelete: {
-                                            detailViewModel.deleteParagraph(at: index)
-                                        },
-                                        onGenerateVoice: {
-                                            detailViewModel.generateVoice(for: paragraph)
-                                        }
-                                    )
+//                                    ParagraphCardView(
+//                                        paragraph: paragraph,
+//                                        index: index,
+//                                        onEdit: {
+//                                            detailViewModel.editParagraph(at: index)
+//                                        },
+//                                        onDelete: {
+//                                            detailViewModel.deleteParagraph(at: index)
+//                                        },
+//                                        onGenerateVoice: {
+//                                            detailViewModel.generateVoice(for: paragraph)
+//                                        }
+//                                    )
                                 }
                             }
                             .padding(.horizontal, 20)
@@ -180,78 +180,78 @@ struct ArticleDetailView: View {
     }
 }
 
-struct ParagraphCardView: View {
-    let paragraph: ParagraphModel
-    let index: Int
-    let onEdit: () -> Void
-    let onDelete: () -> Void
-    let onGenerateVoice: () -> Void
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("段落 \(index + 1)")
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundColor(.blue)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.blue.opacity(0.1))
-                    .cornerRadius(8)
-                
-                Spacer()
-                
-                HStack(spacing: 8) {
-                    Button(action: onEdit) {
-                        Image(systemName: "pencil")
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                    }
-                    
-                    Button(action: onDelete) {
-                        Image(systemName: "trash")
-                            .font(.caption)
-                            .foregroundColor(.red)
-                    }
-                }
-            }
-            
-            Text(paragraph.text)
-                .font(.body)
-                .foregroundColor(.primary)
-                .lineLimit(3)
-                .multilineTextAlignment(.leading)
-            
-            HStack {
-                Text("\(paragraph.voices.count) 个音色")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                
-                Spacer()
-                
-                Button(action: onGenerateVoice) {
-                    HStack(spacing: 4) {
-                        Image(systemName: "waveform")
-                            .font(.caption)
-                        Text("生成音色")
-                            .font(.caption)
-                    }
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(Color.blue)
-                    .cornerRadius(12)
-                }
-            }
-        }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color.white.opacity(0.8))
-                .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
-        )
-    }
-}
+//struct ParagraphCardView: View {
+//    let paragraph: ParagraphModel
+//    let index: Int
+//    let onEdit: () -> Void
+//    let onDelete: () -> Void
+//    let onGenerateVoice: () -> Void
+//    
+//    var body: some View {
+//        VStack(alignment: .leading, spacing: 12) {
+//            HStack {
+//                Text("段落 \(index + 1)")
+//                    .font(.caption)
+//                    .fontWeight(.medium)
+//                    .foregroundColor(.blue)
+//                    .padding(.horizontal, 8)
+//                    .padding(.vertical, 4)
+//                    .background(Color.blue.opacity(0.1))
+//                    .cornerRadius(8)
+//                
+//                Spacer()
+//                
+//                HStack(spacing: 8) {
+//                    Button(action: onEdit) {
+//                        Image(systemName: "pencil")
+//                            .font(.caption)
+//                            .foregroundColor(.gray)
+//                    }
+//                    
+//                    Button(action: onDelete) {
+//                        Image(systemName: "trash")
+//                            .font(.caption)
+//                            .foregroundColor(.red)
+//                    }
+//                }
+//            }
+//            
+//            Text(paragraph.text)
+//                .font(.body)
+//                .foregroundColor(.primary)
+//                .lineLimit(3)
+//                .multilineTextAlignment(.leading)
+//            
+//            HStack {
+//                Text("\(paragraph.voices.count) 个音色")
+//                    .font(.caption)
+//                    .foregroundColor(.secondary)
+//                
+//                Spacer()
+//                
+//                Button(action: onGenerateVoice) {
+//                    HStack(spacing: 4) {
+//                        Image(systemName: "waveform")
+//                            .font(.caption)
+//                        Text("生成音色")
+//                            .font(.caption)
+//                    }
+//                    .foregroundColor(.white)
+//                    .padding(.horizontal, 12)
+//                    .padding(.vertical, 6)
+//                    .background(Color.blue)
+//                    .cornerRadius(12)
+//                }
+//            }
+//        }
+//        .padding(16)
+//        .background(
+//            RoundedRectangle(cornerRadius: 16)
+//                .fill(Color.white.opacity(0.8))
+//                .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
+//        )
+//    }
+//}
 
 struct AddParagraphView: View {
     @Binding var paragraphText: String

@@ -9,10 +9,7 @@ struct TextListView: View {
     var body: some View {
         ScrollView {
             if viewModel.texts.isEmpty {
-                EmptyStateView {
-                    // 这里可以添加添加文本的回调
-                }
-                .padding(.top, 60)
+                EmptyStateView(icon: "", title: "aaa", subtitle: "bbbb")
             } else {
                 LazyVStack(spacing: 16) {
                     LazyVStack(spacing: 12) {

@@ -7,23 +7,8 @@ class ArticleModel: Object, Identifiable {
     @Persisted var name: String
     @Persisted var updateTime: Date
     
-    // 一对多关系：一个文章包含多个段落
-    @Persisted var paragraphs = List<ParagraphModel>()
-    
-    // 计算属性：获取所有音色
-    var allVoices: [VoiceModel] {
-        return Array(paragraphs.flatMap { $0.voices })
-    }
-    
-    // 计算属性：获取段落数量
-    var paragraphCount: Int {
-        return paragraphs.count
-    }
-    
-    // 计算属性：获取音色数量
-    var voiceCount: Int {
-        return allVoices.count
-    }
+    // 改为存储段落UUID的引用，而不是直接包含段落
+    @Persisted var paragraphUUIDs = List<String>()
     
     convenience init(uuid: String, name: String) {
         self.init()

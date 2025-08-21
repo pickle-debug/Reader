@@ -38,13 +38,13 @@ class ArticleDetailViewModel: ObservableObject {
     
     private func loadParagraphs() {
         guard let realm = realm else { return }
-        
-        // 获取当前文章的段落
-        let articleInRealm = realm.object(ofType: ArticleModel.self, forPrimaryKey: article.uuid)
-        if let articleInRealm = articleInRealm {
-            self.paragraphs = Array(articleInRealm.paragraphs.sorted(byKeyPath: "createTime", ascending: true))
-            onParagraphsUpdated?(self.paragraphs)
-        }
+//        
+//        // 获取当前文章的段落
+//        let articleInRealm = realm.object(ofType: ArticleModel.self, forPrimaryKey: article.uuid)
+//        if let articleInRealm = articleInRealm {
+//            self.paragraphs = Array(articleInRealm.paragraphs.sorted(byKeyPath: "createTime", ascending: true))
+//            onParagraphsUpdated?(self.paragraphs)
+//        }
     }
     
     func addParagraph(text: String) {
@@ -52,13 +52,13 @@ class ArticleDetailViewModel: ObservableObject {
         
         do {
             try realm.write {
-                let paragraph = ParagraphModel(uuid: UUID().uuidString, text: text, mp3file: "")
+                let paragraph = ParagraphModel(uuid: UUID().uuidString, text: text)
                 realm.add(paragraph)
                 
                 // 添加到文章的段落列表
-                let articleInRealm = realm.object(ofType: ArticleModel.self, forPrimaryKey: article.uuid)
-                articleInRealm?.paragraphs.append(paragraph)
-                articleInRealm?.updateTime = Date()
+//                let articleInRealm = realm.object(ofType: ArticleModel.self, forPrimaryKey: article.uuid)
+//                articleInRealm?.paragraphs.append(paragraph)
+//                articleInRealm?.updateTime = Date()
             }
         } catch {
             print("Failed to add paragraph: \(error)")
@@ -102,9 +102,9 @@ class ArticleDetailViewModel: ObservableObject {
                 
                 // 从文章的段落列表中移除
                 let articleInRealm = realm.object(ofType: ArticleModel.self, forPrimaryKey: article.uuid)
-                if let paragraphIndex = articleInRealm?.paragraphs.index(of: paragraph) {
-                    articleInRealm?.paragraphs.remove(at: paragraphIndex)
-                }
+//                if let paragraphIndex = articleInRealm?.paragraphs.index(of: paragraph) {
+//                    articleInRealm?.paragraphs.remove(at: paragraphIndex)
+//                }
                 
                 // 删除段落
                 realm.delete(paragraph)
