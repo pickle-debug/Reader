@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TextListView: View {
-    @ObservedObject var viewModel: TextViewModel
+    @ObservedObject var viewModel: ArticleViewModel
     @State private var showingEditSheet = false
     @State private var editingIndex: Int?
     @State private var editingText = ""
@@ -15,22 +15,12 @@ struct TextListView: View {
                 .padding(.top, 60)
             } else {
                 LazyVStack(spacing: 16) {
-                    // Now Playing Section
-//                    if viewModel.isPlaying && !viewModel.currentText.isEmpty {
-//                        NowPlayingView(
-//                            text: viewModel.currentText,
-//                            isPlaying: viewModel.isPlaying
-//                        )
-//                        .padding(.horizontal, 20)
-//                    }
-                    
-                    // Text List with Drag and Drop
                     LazyVStack(spacing: 12) {
                         ForEach(Array(viewModel.texts.enumerated()), id: \.offset) { index, text in
                             TextCellView(
                                 text: text,
                                 index: index,
-                                isSelected: viewModel.selectedTexts.contains(index),
+                                isSelected: viewModel.selectedParagraphs.contains(index),
                                 onToggle: {
                                     viewModel.toggleSelection(index)
                                 },
@@ -41,7 +31,8 @@ struct TextListView: View {
                                 },
                                 onDelete: {
                                     withAnimation(.easeInOut(duration: 0.3)) {
-                                        viewModel.deleteText(at: index)
+                                        // 这里需要实现删除功能
+                                        print("Delete paragraph at index: \(index)")
                                     }
                                 }
                             )
@@ -52,7 +43,8 @@ struct TextListView: View {
                         }
                         .onMove { from, to in
                             withAnimation(.easeInOut(duration: 0.3)) {
-                                viewModel.moveText(from: from, to: to)
+                                // 这里需要实现移动功能
+                                print("Move from \(from) to \(to)")
                             }
                         }
                     }
@@ -67,7 +59,8 @@ struct TextListView: View {
                 text: $editingText,
                 onSave: {
                     if let index = editingIndex {
-                        viewModel.updateText(at: index, newText: editingText)
+                        // 这里需要实现更新功能
+                        print("Update text at index: \(index) with: \(editingText)")
                     }
                     showingEditSheet = false
                 },
@@ -343,5 +336,5 @@ struct TextEditView: View {
 }
 
 #Preview {
-    TextListView(viewModel: TextViewModel())
+    TextListView(viewModel: ArticleViewModel())
 }

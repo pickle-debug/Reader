@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct MusicPlayerView: View {
-    @ObservedObject var viewModel: TextViewModel
+    @ObservedObject var viewModel: ArticleViewModel
     
     var body: some View {
         VStack(spacing: 0) {
@@ -67,10 +67,10 @@ struct MusicPlayerView: View {
                     .foregroundColor(.white)
                     .padding(.horizontal, 20)
                     .padding(.vertical, 10)
-                    .background(viewModel.selectedTexts.isEmpty ? Color.gray : Color.blue)
-                    .cornerRadius(20)
-                }
-                .disabled(viewModel.selectedTexts.isEmpty)
+                                    .background(viewModel.selectedParagraphs.isEmpty ? Color.gray : Color.blue)
+                .cornerRadius(20)
+            }
+            .disabled(viewModel.selectedParagraphs.isEmpty)
             }
             .padding(.bottom, 20)
         }
@@ -87,5 +87,5 @@ struct MusicPlayerView: View {
 }
 
 #Preview {
-    MusicPlayerView(viewModel: TextViewModel())
+    MusicPlayerView(viewModel: ArticleViewModel())
 }

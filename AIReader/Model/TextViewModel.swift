@@ -3,36 +3,8 @@ import AVFoundation
 import SwiftUI
 import RealmSwift
 
-enum PlayMode: CaseIterable {
-    case listLoop
-    case random
-    case singleLoop
-    
-    var description: String {
-        switch self {
-        case .listLoop:
-            return "列表"
-        case .random:
-            return "随机"
-        case .singleLoop:
-            return "单曲"
-        }
-    }
-    
-    var icon: String {
-        switch self {
-        case .listLoop:
-            return "repeat"
-        case .random:
-            return "shuffle"
-        case .singleLoop:
-            return "repeat.1"
-        }
-    }
-}
-
 class TextViewModel: ObservableObject {
-    @Published var textModels: [TextModel] = []
+    @Published var textModels: [ParagraphModel] = []
     @Published var selectedTexts: Set<Int> = []
     @Published var isPlaying = false
     @Published var currentTime: TimeInterval = 0
@@ -74,7 +46,7 @@ class TextViewModel: ObservableObject {
     private func loadTextsFromRealm() {
         guard let realm = realm else { return }
         
-        let results = realm.objects(TextModel.self).sorted(byKeyPath: "createTime", ascending: true)
+        let results = realm.objects(ParagraphModel.self).sorted(byKeyPath: "createTime", ascending: true)
         textModels = Array(results)
     }
     
@@ -95,15 +67,15 @@ class TextViewModel: ObservableObject {
     
     func addText(_ text: String) {
         let uuid = UUID().uuidString
-        let textModel = TextModel(uuid: uuid, text: text, mp3file: "\(uuid).mp3")
+        let paragraph = ParagraphModel(uuid: uuid, text: text, mp3file: "\(uuid).mp3")
         
         guard let realm = realm else { return }
         
         do {
             try realm.write {
-                realm.add(textModel)
+                realm.add(paragraph)
             }
-            textModels.append(textModel)
+            textModels.append(paragraph)
         } catch {
             print("Failed to add text to Realm: \(error)")
         }
@@ -229,13 +201,13 @@ class TextViewModel: ObservableObject {
     func generateAIVoice() {
         guard !selectedTexts.isEmpty else { return }
         
-        let selectedTextModels = Array(selectedTexts).sorted().compactMap { index in
+        let selectedParagraphModels = Array(selectedTexts).sorted().compactMap { index in
             index < textModels.count ? textModels[index] : nil
         }
         
         isGenerating = true
         
-        audioService.generateAudioForTexts(selectedTextModels) { [weak self] completedCount in
+        audioService.generateAudioForParagraphs(selectedParagraphModels) { [weak self] (completedCount: Int) in
             DispatchQueue.main.async {
                 self?.isGenerating = false
                 print("Generated \(completedCount) audio files")

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct HeaderView: View {
-    @ObservedObject var viewModel: TextViewModel
+    @ObservedObject var viewModel: ArticleViewModel
     let onAddText: () -> Void
     
     var body: some View {
@@ -13,8 +13,8 @@ struct HeaderView: View {
                         .fontWeight(.bold)
                         .foregroundColor(.primary)
                     
-                    if viewModel.selectedTexts.count > 0 {
-                        Text("已选择\(viewModel.selectedTexts.count)段")
+                    if viewModel.selectedParagraphs.count > 0 {
+                        Text("已选择\(viewModel.selectedParagraphs.count)段")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -31,9 +31,9 @@ struct HeaderView: View {
             .padding(.horizontal, 20)
             .padding(.top, 10)
             
-            if viewModel.selectedTexts.count > 0 {
+            if viewModel.selectedParagraphs.count > 0 {
                 HStack {
-                    Text("\(viewModel.selectedTexts.count)段文本")
+                    Text("\(viewModel.selectedParagraphs.count)段文本")
                         .font(.caption)
                         .foregroundColor(.secondary)
                     
@@ -54,5 +54,5 @@ struct HeaderView: View {
 }
 
 #Preview {
-    HeaderView(viewModel: TextViewModel(), onAddText: {})
+    HeaderView(viewModel: ArticleViewModel(), onAddText: {})
 }
