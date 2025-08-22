@@ -6,6 +6,9 @@ struct HomeView: View {
     @State private var newArticleName = ""
     @State private var newParagraphContent: String = ""
 
+    let openArticle: (ArticleModel) -> Void
+    let matchedNS: Namespace.ID
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -56,7 +59,7 @@ struct HomeView: View {
                     
                     // 内容区域
                     if viewModel.currentView == .articles {
-                        ArticlesContentView(viewModel: viewModel)
+                        ArticlesContentView(viewModel: viewModel, onSelect: openArticle, ns: matchedNS)
                     } else {
                         ParagraphsContentView(viewModel: viewModel)
                     }
@@ -78,23 +81,7 @@ struct HomeView: View {
         }
         .navigationBarHidden(true)
         .sheet(isPresented: $showingCreateArticle) {
-            CreateArticleView(
-                articleName: $newArticleName,
-                onSave: {
-                    if !newArticleName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                        viewModel.createArticle(newArticleName)
-                        newArticleName = ""
-                        showingCreateArticle = false
-                    }
-                },
-                onCancel: {
-                    newArticleName = ""
-                    showingCreateArticle = false
-                }
-            )
-        }
-        .sheet(item: $viewModel.selectedArticle) { article in
-            ArticleDetailView(article: article)
+            ParagraphPickerView(viewModel: viewModel)
         }
     }
 }
@@ -154,7 +141,4 @@ struct CreateArticleView: View {
             isTextFieldFocused = true
         }
     }
-}
-#Preview {
-    HomeView()
 }

@@ -14,50 +14,42 @@ class ArticleManager: ObservableObject {
     
     static let shared = ArticleManager()
     
-    private var realm: Realm?
-    private var notificationToken: NotificationToken?
-    
+    private var realm: Realm? = try? Realm()
+    private var token: NotificationToken?
+
     init() {
-        setupRealm()
-        loadArticles()
+        token = realm?.objects(ArticleModel.self).observe { [weak self] _ in
+            DispatchQueue.main.async { self?.reload() }
+        }
+        reload()
     }
     deinit {
-        notificationToken?.invalidate()
+        token?.invalidate()
     }
-    
-    private func setupRealm() {
-        do {
-            realm = try Realm()
-            
-            notificationToken = realm?.objects(ArticleModel.self).observe { [weak self] changes in
-                DispatchQueue.main.async {
-                    self?.loadArticles()
-                }
-            }
-        } catch {
-            print("Failed to initialize Realm: \(error)")
-        }
+  
+    private func reload() {
+        guard let realm else { return }
+        let results = realm.objects(ArticleModel.self)
+            .sorted(byKeyPath: "updateTime", ascending: false)
+        articles = Array(results)
     }
+
     
-    private func loadArticles() {
-        guard let realm = realm else { return }
-        let articles = realm.objects(ArticleModel.self).sorted(byKeyPath: "updateTime", ascending: false)
-        self.articles = Array(articles).filter { !$0.isInvalidated }
-    }
-    
-    func addArticle(name: String) {
-        guard let realm = realm else { return }
-        
+    func addArticle(name: String, paragraphIDs: [String]) {
+        guard let realm else { return }
         do {
             try realm.write {
                 let article = ArticleModel(uuid: UUID().uuidString, name: name)
-                realm.add(article)
+                article.paragraphUUIDs.removeAll()
+                // 保留顺序&重复
+                paragraphIDs.forEach { article.paragraphUUIDs.append($0) }
+                realm.add(article, update: .modified)
             }
         } catch {
-            print("Failed to create article: \(error)")
+            print("Failed to add article:", error)
         }
     }
-    
+
     // 获取文章的段落
     func getParagraphs(for article: ArticleModel) -> [ParagraphModel] {
         guard let realm = realm else { return [] }

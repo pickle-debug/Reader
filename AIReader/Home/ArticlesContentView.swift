@@ -66,29 +66,30 @@ struct ArticleCardView: View {
 // 文章内容视图
 struct ArticlesContentView: View {
     @ObservedObject var viewModel: HomeViewModel
+    let onSelect: (ArticleModel) -> Void
+    let ns: Namespace.ID
     
     var body: some View {
-        if viewModel.articles.isEmpty {
-            EmptyStateView(
-                icon: "doc.text",
-                title: "还没有文章",
-                subtitle: "点击右上角的 + 按钮创建你的第一篇文章"
-            ) {
-                // 可以添加创建文章的快捷按钮
-            }
-        } else {
-            ScrollView {
-                LazyVStack(spacing: 16) {
-                    ForEach(viewModel.articles, id: \.uuid) { article in
-                        ArticleCardView(article: article, viewModel: viewModel) {
-                            viewModel.selectArticle(article)
-                        }
+        ZStack {
+            // 列表
+            List {
+                ForEach(viewModel.articles, id: \.uuid) { article in
+                    ArticleCardView(article: article, viewModel: viewModel) {
+                        onSelect(article)
                     }
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                    
+                    .background(
+                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                            .fill(Color.white.opacity(0.8))
+                            .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+                            .matchedGeometryEffect(id: "bg-\(article.uuid)", in: ns)
+                    )
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 100)
             }
+            .scrollContentBackground(.hidden)
+            .listStyle(.plain)
         }
     }
 }
-

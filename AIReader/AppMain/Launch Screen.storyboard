@@ -22,13 +22,15 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Icon" translatesAutoresizingMaskIntoConstraints="NO" id="6AZ-Dp-raK">
-                                <rect key="frame" x="65" y="139" width="262" height="265"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon" translatesAutoresizingMaskIntoConstraints="NO" id="6AZ-Dp-raK">
+                                <rect key="frame" x="96.666666666666686" y="139" width="200" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="79E-wm-XPB"/>
+                                    <constraint firstAttribute="width" constant="200" id="JU3-zw-OQC"/>
+                                </constraints>
                             </imageView>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b1x-cg-vWh">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b1x-cg-vWh">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.9847981334" green="0.88739210369999999" blue="0.74260574580000005" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                         </subviews>
@@ -36,8 +38,14 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="Bcu-3y-fUS" firstAttribute="centerX" secondItem="obG-Y5-kRd" secondAttribute="centerX" id="5cz-MP-9tL"/>
+                            <constraint firstItem="b1x-cg-vWh" firstAttribute="trailing" secondItem="Bcu-3y-fUS" secondAttribute="trailing" id="E9m-Lw-FFr"/>
+                            <constraint firstItem="6AZ-Dp-raK" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" constant="21" id="Sbf-dr-XM1"/>
                             <constraint firstItem="obG-Y5-kRd" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="20" symbolic="YES" id="SfN-ll-jLj"/>
+                            <constraint firstAttribute="bottom" secondItem="b1x-cg-vWh" secondAttribute="bottom" id="UFp-OE-DiG"/>
                             <constraint firstAttribute="bottom" secondItem="obG-Y5-kRd" secondAttribute="bottom" constant="20" id="Y44-ml-fuU"/>
+                            <constraint firstItem="b1x-cg-vWh" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="bEo-Mg-CoJ"/>
+                            <constraint firstItem="6AZ-Dp-raK" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="eyI-hn-fea"/>
+                            <constraint firstItem="b1x-cg-vWh" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" id="w3V-qk-0Ss"/>
                         </constraints>
                     </view>
                 </viewController>

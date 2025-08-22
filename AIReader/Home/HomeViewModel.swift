@@ -38,8 +38,8 @@ class HomeViewModel: ObservableObject {
         selectedArticle = article
     }
 
-    func createArticle(_ name: String) {
-        articleManager.addArticle(name: name)
+    func createArticle(with name: String, paragraphIDs: [String]) {
+        articleManager.addArticle(name: name, paragraphIDs: paragraphIDs)
     }
     
     func createParagraph(_ content:String) {
