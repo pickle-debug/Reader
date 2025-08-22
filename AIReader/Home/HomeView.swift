@@ -99,59 +99,6 @@ struct HomeView: View {
     }
 }
 
-// 文章内容视图
-struct ArticlesContentView: View {
-    @ObservedObject var viewModel: HomeViewModel
-    
-    var body: some View {
-        if viewModel.articles.isEmpty {
-            EmptyStateView(
-                icon: "doc.text",
-                title: "还没有文章",
-                subtitle: "点击右上角的 + 按钮创建你的第一篇文章"
-            ) {
-                // 可以添加创建文章的快捷按钮
-            }
-        } else {
-            ScrollView {
-                LazyVStack(spacing: 16) {
-                    ForEach(viewModel.articles, id: \.uuid) { article in
-                        ArticleCardView(article: article, viewModel: viewModel) {
-                            viewModel.selectArticle(article)
-                        }
-                    }
-                }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 100)
-            }
-        }
-    }
-}
-
-// 段落内容视图
-struct ParagraphsContentView: View {
-    @ObservedObject var viewModel: HomeViewModel
-    
-    var body: some View {
-        if viewModel.paragraphs.isEmpty {
-            EmptyStateView(
-                icon: "text.alignleft",
-                title: "还没有段落",
-                subtitle: "使用下方的输入框创建你的第一个段落"
-            )
-        } else {
-            ScrollView {
-                LazyVStack(spacing: 16) {
-                    ForEach(viewModel.paragraphs, id: \.uuid) { paragraph in
-                        ParagraphCardView(paragraph: paragraph, viewModel: viewModel)
-                    }
-                }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 100)
-            }
-        }
-    }
-}
 // 段落卡片视图
 struct ParagraphCardView: View {
     let paragraph: ParagraphModel
@@ -209,56 +156,6 @@ struct ParagraphCardView: View {
     }
 }
 
-// 空状态视图
-struct EmptyStateView: View {
-    let icon: String
-    let title: String
-    let subtitle: String
-    let action: (() -> Void)?
-    
-    init(icon: String, title: String, subtitle: String, action: (() -> Void)? = nil) {
-        self.icon = icon
-        self.title = title
-        self.subtitle = subtitle
-        self.action = action
-    }
-    
-    var body: some View {
-        VStack(spacing: 20) {
-            Image(systemName: icon)
-                .font(.system(size: 60))
-                .foregroundColor(.gray)
-            
-            Text(title)
-                .font(.title3)
-                .fontWeight(.medium)
-                .foregroundColor(.primary)
-            
-            Text(subtitle)
-                .font(.body)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-            
-            if let action = action {
-                Button(action: action) {
-                    HStack(spacing: 8) {
-                        Image(systemName: "plus")
-                        Text("开始创建")
-                    }
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 12)
-                    .background(Color.blue)
-                    .cornerRadius(20)
-                }
-            }
-        }
-        .padding(.top, 100)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-}
 
 // 修改ArticleCardView以适应新的数据结构
 struct ArticleCardView: View {
