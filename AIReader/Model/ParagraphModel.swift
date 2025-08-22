@@ -9,7 +9,8 @@ class ParagraphModel: Object, Identifiable {
     
     @Persisted var voices: List<VoiceModel> = List<VoiceModel>()
     @Persisted var defaultVoice: String? // 默认音色的UUID
-    
+    @Persisted var order: Int = 0
+
     convenience init(uuid: String, text: String) {
         self.init()
         self.uuid = uuid

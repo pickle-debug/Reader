@@ -31,11 +31,19 @@ struct FloatingInputView: View {
         HStack(alignment: .bottom, spacing: 8) {
             TextField(placeholder, text: $inputText, axis: .vertical)
                 .font(.body)
-                .lineLimit(1...maxLines) // 限制行数范围
+                .lineLimit(1...maxLines)
                 .padding(.horizontal, 10)
                 .padding(.vertical, textFieldVerticalPadding)
                 .background(Color.clear)
-                .fixedSize(horizontal: false, vertical: true) // 允许垂直方向根据内容调整
+                .fixedSize(horizontal: false, vertical: true)
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+                        Button("完成") {
+                            endEditing()
+                        }
+                    }
+                }
             
             Button(action: {
                 onSend()
@@ -54,7 +62,13 @@ struct FloatingInputView: View {
                 .fill(.ultraThinMaterial)
                 .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
         }
-        .padding(.horizontal, 16)
-        .padding(.bottom, 10)
     }
 }
+extension View {
+    func endEditing() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
+                                        to: nil, from: nil, for: nil)
+    }
+}
+
+

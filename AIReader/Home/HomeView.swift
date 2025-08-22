@@ -61,19 +61,19 @@ struct HomeView: View {
                         ParagraphsContentView(viewModel: viewModel)
                     }
                 }
-                
-                // 浮动输入框（只在段落视图显示）
-                if viewModel.currentView == .paragraphs {
-                    VStack {
-                        Spacer()
-                        FloatingInputView(inputText: $newParagraphContent) {
-                            if !newParagraphContent.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                                viewModel.createParagraph(content: newParagraphContent)
-                            }
-                            newParagraphContent = ""
-                        }
+            }
+        }
+        .safeAreaInset(edge: .bottom) {
+            if viewModel.currentView == .paragraphs {
+                FloatingInputView(inputText: $newParagraphContent) {
+                    if !newParagraphContent.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        viewModel.createParagraph(newParagraphContent)
                     }
+                    newParagraphContent = ""
                 }
+                .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+                .padding(.horizontal, 16)
+                .padding(.bottom, 5)
             }
         }
         .navigationBarHidden(true)
@@ -82,7 +82,7 @@ struct HomeView: View {
                 articleName: $newArticleName,
                 onSave: {
                     if !newArticleName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                        viewModel.createArticle(name: newArticleName)
+                        viewModel.createArticle(newArticleName)
                         newArticleName = ""
                         showingCreateArticle = false
                     }
@@ -96,120 +96,6 @@ struct HomeView: View {
         .sheet(item: $viewModel.selectedArticle) { article in
             ArticleDetailView(article: article)
         }
-    }
-}
-
-// 段落卡片视图
-struct ParagraphCardView: View {
-    let paragraph: ParagraphModel
-    @ObservedObject var viewModel: HomeViewModel
-    @State private var showingDeleteAlert = false
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(paragraph.text)
-                        .font(.body)
-                        .foregroundColor(.primary)
-                        .lineLimit(3)
-                    
-                    Text("创建于 \(paragraph.createTime.formatted(date: .abbreviated, time: .shortened))")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                
-                Spacer()
-                
-                VStack(alignment: .trailing, spacing: 4) {
-                    Text("\(paragraph.voices.count) 音色")
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .foregroundColor(.blue)
-                    
-                    Menu {
-                        Button("删除", role: .destructive) {
-                            showingDeleteAlert = true
-                        }
-                    } label: {
-                        Image(systemName: "ellipsis.circle")
-                            .font(.title3)
-                            .foregroundColor(.gray)
-                    }
-                }
-            }
-        }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color.white.opacity(0.8))
-                .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
-        )
-        .alert("删除段落", isPresented: $showingDeleteAlert) {
-            Button("取消", role: .cancel) { }
-            Button("删除", role: .destructive) {
-                viewModel.deleteParagraph(paragraph)
-            }
-        } message: {
-            Text("确定要删除这个段落吗？这个操作不可撤销。")
-        }
-    }
-}
-
-
-// 修改ArticleCardView以适应新的数据结构
-struct ArticleCardView: View {
-    let article: ArticleModel
-    @ObservedObject var viewModel: HomeViewModel
-    let onTap: () -> Void
-    
-    var body: some View {
-        Button(action: onTap) {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(article.name)
-                            .font(.headline)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.primary)
-                            .lineLimit(1)
-                        
-                        Text("创建于 \(article.createTime.formatted(date: .abbreviated, time: .shortened))")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    
-                    Spacer()
-                    
-                    VStack(alignment: .trailing, spacing: 4) {
-                        let stats = viewModel.getArticleStats(for: article)
-                        Text("\(stats.paragraphCount) 段")
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundColor(.blue)
-                        
-                        Text("\(stats.voiceCount) 音色")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                }
-                
-                // 进度条（如果有段落）
-                let stats = viewModel.getArticleStats(for: article)
-                if stats.paragraphCount > 0 {
-                    ProgressView(value: Double(stats.voiceCount), total: Double(stats.paragraphCount))
-                        .progressViewStyle(LinearProgressViewStyle(tint: .blue))
-                        .scaleEffect(y: 0.8)
-                }
-            }
-            .padding(16)
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.white.opacity(0.8))
-                    .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
-            )
-        }
-        .buttonStyle(PlainButtonStyle())
     }
 }
 
@@ -269,7 +155,6 @@ struct CreateArticleView: View {
         }
     }
 }
-
 #Preview {
     HomeView()
 }
