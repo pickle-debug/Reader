@@ -35,16 +35,28 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
+				Whisper/WhisperPlayerHeader.swift,
 			);
 			target = DCB4936F2E5565B6001B2522 /* read */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		7782914E2E5AEA0100D6EA7D /* Exceptions for "AIReader" folder in "Copy Bundle Resources" phase from "read" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = DCB4936E2E5565B6001B2522 /* Resources */;
+			membershipExceptions = (
+				Whisper/WhisperPlayerHeader.swift,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		DCB493722E5565B6001B2522 /* AIReader */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				DC8C9C2C2E56B37F0012DFEB /* Exceptions for "AIReader" folder in "read" target */,
+				7782914E2E5AEA0100D6EA7D /* Exceptions for "AIReader" folder in "Copy Bundle Resources" phase from "read" target */,
 			);
 			path = AIReader;
 			sourceTree = "<group>";
@@ -179,7 +191,7 @@
 				INFOPLIST_FILE = AIReader/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Whisper耳语";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -205,7 +217,7 @@
 				INFOPLIST_FILE = AIReader/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Whisper耳语";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

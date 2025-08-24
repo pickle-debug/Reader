@@ -56,17 +56,5 @@ class HomeViewModel: ObservableObject {
         paragraphs = copy
         paragraphManager.updateOrder(by: copy.map { $0.id })
     }
-    
-    func getArticleStats(for article: ArticleModel) -> (paragraphCount: Int, voiceCount: Int) {
-        let paragraphs = articleManager.getParagraphs(for: article)
-        let voiceCount = paragraphs.reduce(0) { count, paragraph in
-            // 安全检查，避免访问已删除的对象
-            if paragraph.isInvalidated {
-                return count
-            }
-            return count + paragraph.voices.count
-        }
-        return (paragraphs.count, voiceCount)
-    }
 
 }

@@ -5,7 +5,10 @@ struct HomeView: View {
     @State private var showingCreateArticle = false
     @State private var newArticleName = ""
     @State private var newParagraphContent: String = ""
-
+    
+    @State private var expandSheet: Bool = false
+    @Namespace private var animation
+    
     let openArticle: (ArticleModel) -> Void
     let matchedNS: Namespace.ID
 
@@ -67,78 +70,40 @@ struct HomeView: View {
             }
         }
         .safeAreaInset(edge: .bottom) {
-            if viewModel.currentView == .paragraphs {
-                FloatingInputView(inputText: $newParagraphContent) {
-                    if !newParagraphContent.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                        viewModel.createParagraph(newParagraphContent)
+            VStack(spacing: 8) {
+                if viewModel.currentView == .paragraphs {
+                    FloatingInputView(inputText: $newParagraphContent) {
+                        if !newParagraphContent.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                            viewModel.createParagraph(newParagraphContent)
+                        }
+                        newParagraphContent = ""
                     }
-                    newParagraphContent = ""
+                    .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 5)
+                } else {
+                    MiniWhisperPlayerView()
+                        .frame(height: 48)  // 设置固定高度
+                        .background(.ultraThinMaterial, in: .rect(cornerRadius: 15, style: .continuous))
+                        .padding(.horizontal, 16)
+                        .matchedGeometryEffect(id: "MINIPLAYER", in: animation)
+
+                        .onTapGesture {
+                            expandSheet.toggle()
+                        }
                 }
-                .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
-                .padding(.horizontal, 16)
-                .padding(.bottom, 5)
+            }
+        }
+        .overlay {
+            if expandSheet {
+                WhisperBottomSheet(expandSheet: $expandSheet, animation: animation)
+                // Transtion for more fluent Animation
+                    .transition(.asymmetric(insertion: .identity, removal: .offset(y: -5)))
             }
         }
         .navigationBarHidden(true)
         .sheet(isPresented: $showingCreateArticle) {
             ParagraphPickerView(viewModel: viewModel)
-        }
-    }
-}
-
-struct CreateArticleView: View {
-    @Binding var articleName: String
-    let onSave: () -> Void
-    let onCancel: () -> Void
-    
-    @FocusState private var isTextFieldFocused: Bool
-    
-    var body: some View {
-        NavigationView {
-            VStack(spacing: 20) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("文章名称")
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                    
-                    TextField("输入文章名称", text: $articleName)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .focused($isTextFieldFocused)
-                }
-                
-                Spacer()
-                
-                HStack(spacing: 16) {
-                    Button("取消", action: onCancel)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .padding(.horizontal, 24)
-                        .padding(.vertical, 12)
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(20)
-                    
-                    Button("创建", action: onSave)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 24)
-                        .padding(.vertical, 12)
-                        .background(articleName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? Color.gray : Color.blue)
-                        .cornerRadius(20)
-                        .disabled(articleName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                }
-            }
-            .padding(20)
-            .navigationTitle("创建新文章")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("取消", action: onCancel)
-                }
-            }
-        }
-        .onAppear {
-            isTextFieldFocused = true
         }
     }
 }

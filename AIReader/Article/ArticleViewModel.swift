@@ -96,27 +96,27 @@ class ArticleViewModel: ObservableObject {
         
         let currentParagraph = paragraphs[currentTrackIndex]
         
-        // 检查音频文件是否存在
-        if audioService.audioFileExists(for: currentParagraph.uuid) {
-            // 音频文件存在，直接播放
-            if let player = audioService.createAudioPlayer(for: currentParagraph.uuid) {
-                audioPlayer = player
-                audioPlayer?.play()
-                isPlaying = true
-                startTimer()
-            }
-        } else {
-            // 音频文件不存在，先生成音频
-            isGenerating = true
-            audioService.generateAudio(for: currentParagraph.text, uuid: currentParagraph.uuid) { [weak self] success in
-                DispatchQueue.main.async {
-                    self?.isGenerating = false
-                    if success {
-                        self?.startPlayback() // 重新开始播放
-                    }
-                }
-            }
-        }
+//        // 检查音频文件是否存在
+//        if audioService.audioFileExists(for: currentParagraph.uuid) {
+//            // 音频文件存在，直接播放
+//            if let player = audioService.createAudioPlayer(for: currentParagraph.uuid) {
+//                audioPlayer = player
+//                audioPlayer?.play()
+//                isPlaying = true
+//                startTimer()
+//            }
+//        } else {
+//            // 音频文件不存在，先生成音频
+//            isGenerating = true
+//            audioService.generateAudio(for: currentParagraph.text, uuid: currentParagraph.uuid) { [weak self] success in
+//                DispatchQueue.main.async {
+//                    self?.isGenerating = false
+//                    if success {
+//                        self?.startPlayback() // 重新开始播放
+//                    }
+//                }
+//            }
+//        }
     }
     
     func pausePlayback() {
@@ -188,18 +188,18 @@ class ArticleViewModel: ObservableObject {
         
         isGenerating = true
         
-        audioService.generateAudioForParagraphs(selectedParagraphModels) { [weak self] (completedCount: Int) in
-            DispatchQueue.main.async {
-                self?.isGenerating = false
-                print("Generated \(completedCount) audio files")
-                
-                // 自动开始播放第一个选中的文本
-                if let selectedParagraphs = self?.selectedParagraphs, !selectedParagraphs.isEmpty {
-                    self?.currentTrackIndex = Array(self?.selectedParagraphs ?? []).sorted()[0]
-                    self?.startPlayback()
-                }
-            }
-        }
+//        audioService.generateAudioForParagraphs(selectedParagraphModels) { [weak self] (completedCount: Int) in
+//            DispatchQueue.main.async {
+//                self?.isGenerating = false
+//                print("Generated \(completedCount) audio files")
+//                
+//                // 自动开始播放第一个选中的文本
+//                if let selectedParagraphs = self?.selectedParagraphs, !selectedParagraphs.isEmpty {
+//                    self?.currentTrackIndex = Array(self?.selectedParagraphs ?? []).sorted()[0]
+//                    self?.startPlayback()
+//                }
+//            }
+//        }
     }
     
     // MARK: - Private Methods

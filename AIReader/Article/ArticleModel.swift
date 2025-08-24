@@ -2,23 +2,31 @@ import Foundation
 import RealmSwift
 
 class ArticleModel: Object, Identifiable {
-    @Persisted(primaryKey: true) var uuid: String
-    @Persisted var createTime: Date
-    @Persisted var name: String
-    @Persisted var updateTime: Date
+    @Persisted(primaryKey: true) var uuid: String = UUID().uuidString
+    @Persisted var name: String = ""
+    @Persisted var createTime: Date = Date()
+    @Persisted var updateTime: Date = Date()
     
-    // 改为存储段落UUID的引用，而不是直接包含段落
-    @Persisted var paragraphUUIDs = List<String>()
+    // 文章的全局默认语音设置
+    @Persisted var voiceValue: String = ""
+    @Persisted var speedValue: String = "1.0"
+    @Persisted var pitchValue: String = "0"
+    @Persisted var styleValue: String = "general"
     
-    convenience init(uuid: String, name: String) {
+    // 一篇文章可以包含多个段落的UUID，用于维护顺序和关联
+    @Persisted var paragraphUUIDs: RealmSwift.List<String>
+    
+    convenience init(name: String, paragraphUUIDs: [String] = [],
+                     voiceValue: String = "zh-CN-XiaoxiaoNeural",
+                     speedValue: String = "1.0",
+                     pitchValue: String = "0",
+                     styleValue: String = "general") {
         self.init()
-        self.uuid = uuid
         self.name = name
-        self.createTime = Date()
-        self.updateTime = Date()
-    }
-    
-    override static func primaryKey() -> String? {
-        return "uuid"
+        self.paragraphUUIDs.append(objectsIn: paragraphUUIDs)
+        self.voiceValue = voiceValue
+        self.speedValue = speedValue
+        self.pitchValue = pitchValue
+        self.styleValue = styleValue
     }
 }

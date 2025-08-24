@@ -22,11 +22,8 @@ struct ParagraphsContentView: View {
             List {
                 ForEach(viewModel.paragraphs) { p in
                     ParagraphCardView( // 你的卡片内容，不要再放“···”按钮
-                        vm: viewModel,
                         id: p.id,
                         text: p.text,
-                        createTime: p.createTime,
-                        voiceCount: p.voiceCount
                     )
                     .listRowBackground(Color.clear)
                     .listRowSeparator(.hidden)
@@ -39,7 +36,6 @@ struct ParagraphsContentView: View {
                         }
                     }
                 }
-                // 如果你要支持“批量删除/重排”，也可以加 .onDelete / .onMove
             }
             .scrollContentBackground(.hidden)
             .background(Color.clear)
@@ -49,13 +45,8 @@ struct ParagraphsContentView: View {
 }
 // 段落卡片视图
 struct ParagraphCardView: View {
-    @ObservedObject var vm: HomeViewModel
     let id: String
     let text: String
-    let createTime: Date
-    let voiceCount: Int
-    @State private var showingDelete = false
-
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(text)
@@ -72,11 +63,5 @@ struct ParagraphCardView: View {
                 .fill(Color.white.opacity(0.8))
                 .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
         )
-        .alert("删除段落", isPresented: $showingDelete) {
-            Button("取消", role: .cancel) {}
-            Button("删除", role: .destructive) { vm.deleteParagraph(uuid: id) }
-        } message: {
-            Text("确定要删除这个段落吗？这个操作不可撤销。")
-        }
     }
 }

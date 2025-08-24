@@ -2,6 +2,12 @@ import SwiftUI
 
 struct GradientBackground: View {
     var body: some View {
+        GradientBackground.gradient
+            .ignoresSafeArea()
+    }
+    
+    // 添加一个计算属性来返回 LinearGradient
+    static var gradient: LinearGradient {
         LinearGradient(
             gradient: Gradient(colors: [
                 Color(red: 0.992, green: 0.988, blue: 0.984), // #fdfcfb
@@ -10,10 +16,8 @@ struct GradientBackground: View {
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
-        .ignoresSafeArea()
     }
 }
-
 // 扩展Color以支持十六进制颜色
 extension Color {
     init(hex: String) {

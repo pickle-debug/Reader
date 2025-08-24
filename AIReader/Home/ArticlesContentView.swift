@@ -28,26 +28,6 @@ struct ArticleCardView: View {
                     }
                     
                     Spacer()
-                    
-                    VStack(alignment: .trailing, spacing: 4) {
-                        let stats = viewModel.getArticleStats(for: article)
-                        Text("\(stats.paragraphCount) 段")
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundColor(.blue)
-                        
-                        Text("\(stats.voiceCount) 音色")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                }
-                
-                // 进度条（如果有段落）
-                let stats = viewModel.getArticleStats(for: article)
-                if stats.paragraphCount > 0 {
-                    ProgressView(value: Double(stats.voiceCount), total: Double(stats.paragraphCount))
-                        .progressViewStyle(LinearProgressViewStyle(tint: .blue))
-                        .scaleEffect(y: 0.8)
                 }
             }
             .padding(16)
