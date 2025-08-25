@@ -169,7 +169,6 @@ class VoiceViewModel: ObservableObject {
 
         // 使用 .first() 获取一次数据，然后进行处理
         articleManager.getArticleDetailPublisher(for: article.uuid)
-            .first() // 只获取一次当前数据
             .sink { [weak self] (articleData, paragraphsData) in
                 guard let self = self else { return }
                 // 现在在这里处理段落数据
