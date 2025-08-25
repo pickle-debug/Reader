@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DC621AE52E5C5CD800860009 /* DebugSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DC621AE42E5C5CD800860009 /* DebugSwift */; };
 		DC8C9C492E56B42E0012DFEB /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = DC8C9C482E56B42E0012DFEB /* Alamofire */; };
 		DC8C9C7F2E56B9680012DFEB /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DC8C9C7E2E56B9680012DFEB /* RealmSwift */; };
 		DC8C9C802E56B9E40012DFEB /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = DC8C9C7E2E56B9680012DFEB /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -70,6 +71,7 @@
 			files = (
 				DC8C9C7F2E56B9680012DFEB /* RealmSwift in Frameworks */,
 				DC8C9C492E56B42E0012DFEB /* Alamofire in Frameworks */,
+				DC621AE52E5C5CD800860009 /* DebugSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,6 +117,7 @@
 			packageProductDependencies = (
 				DC8C9C482E56B42E0012DFEB /* Alamofire */,
 				DC8C9C7E2E56B9680012DFEB /* RealmSwift */,
+				DC621AE42E5C5CD800860009 /* DebugSwift */,
 			);
 			productName = read;
 			productReference = DCB493702E5565B6001B2522 /* read.app */;
@@ -147,6 +150,7 @@
 			packageReferences = (
 				DC8C9C472E56B42E0012DFEB /* XCRemoteSwiftPackageReference "Alamofire" */,
 				DC8C9C7D2E56B9680012DFEB /* XCRemoteSwiftPackageReference "realm-swift" */,
+				DC621AE32E5C5CD800860009 /* XCRemoteSwiftPackageReference "DebugSwift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DCB493712E5565B6001B2522 /* Products */;
@@ -376,6 +380,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		DC621AE32E5C5CD800860009 /* XCRemoteSwiftPackageReference "DebugSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/DebugSwift/DebugSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.7.17;
+			};
+		};
 		DC8C9C472E56B42E0012DFEB /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -395,6 +407,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		DC621AE42E5C5CD800860009 /* DebugSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DC621AE32E5C5CD800860009 /* XCRemoteSwiftPackageReference "DebugSwift" */;
+			productName = DebugSwift;
+		};
 		DC8C9C482E56B42E0012DFEB /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = DC8C9C472E56B42E0012DFEB /* XCRemoteSwiftPackageReference "Alamofire" */;

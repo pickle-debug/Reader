@@ -1,5 +1,5 @@
 {
-  "originHash" : "013993c7f219535a8b81d3cd088ab86b66a31458b882d009c9a9c716a45f6895",
+  "originHash" : "03dd7c880cf7c70a7f377945b3cfb5fd45bef2ae825638562cf453d54208ff56",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "513364f870f6bfc468f9d2ff0a95caccc10044c5",
         "version" : "5.10.2"
+      }
+    },
+    {
+      "identity" : "debugswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/DebugSwift/DebugSwift.git",
+      "state" : {
+        "revision" : "3eb006f99a82e07af0db7eb7c77eb54b583e9a87",
+        "version" : "1.7.17"
       }
     },
     {

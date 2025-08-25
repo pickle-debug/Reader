@@ -46,10 +46,7 @@ struct ArticleDetailView: View {
                         
                         List {
                             ForEach(detailViewModel.paragraphs) { p in
-                                ParagraphCardView(
-                                    id: p.id,
-                                    text: p.text,
-                                )
+                                ParagraphCardView(text: p.paragraph.text)
                                 .listRowBackground(Color.clear)
                                 .listRowSeparator(.hidden)
                             }

@@ -9,28 +9,34 @@ import RealmSwift
 import Foundation
 import SwiftUI
 import Combine
-struct ArticleGlobalVoiceOptions: Hashable, Identifiable {
-    var id: String { UUID().uuidString }
-    var voiceValue: String
-    var speedValue: String
-    var pitchValue: String
-    var styleValue: String
-}
 
-struct ArticleDisplayData: Identifiable {
+struct ArticleData: Identifiable {
     let id: String
     let name: String
     let createTime: Date
     let updateTime: Date
-    var globalVoiceOptions: ArticleGlobalVoiceOptions // 包含全局语音设置
+    var voiceOptions: VoiceOptions
 }
-// 辅助结构体：用于 ViewModel 发布段落及其语音信息，纯 Swift 类型
-struct ArticleParagraphDisplayData: Identifiable {
-    var id: String { paragraph.uuid } // 使用段落的UUID作为ID
-    let paragraph: ParagraphModel // 注意：这里为了简化直接使用 Realm Managed Object。更严格应为 ParagraphDisplayData 纯 struct
-    let articleMatchedVoice: VoiceModel? // 与文章全局设置匹配的语音 (Realm Managed Object)
-    let allVoicesForParagraph: [VoiceModel] // 该段落生成的所有语音 (Realm Managed Objects)
+struct ParagraphData: Identifiable {
+    var id: String = UUID().uuidString
+    let paragraph: ParagraphModel
+    let allVoicesForParagraph: [VoiceModel]
+    
+    func matchedVoice(for voiceOptions: VoiceOptions) -> VoiceModel? {
+        return allVoicesForParagraph.first { voice in
+            voice.voiceValue == voiceOptions.voiceValue &&
+            voice.speedValue == voiceOptions.speedValue &&
+            voice.pitchValue == voiceOptions.pitchValue &&
+            voice.styleValue == voiceOptions.styleValue
+        }
+    }
+    
+    // 检查是否存在匹配的语音
+    func hasMatchedVoice(for voiceOptions: VoiceOptions) -> Bool {
+        return matchedVoice(for: voiceOptions) != nil
+    }
 }
+
 class ArticleManager: ObservableObject {
     @Published var articles: [ArticleModel] = []
     
@@ -38,7 +44,7 @@ class ArticleManager: ObservableObject {
     
     private var realm: Realm? = try? Realm()
     private var token: NotificationToken?
-    private var articleDetailSubjects: [String: PassthroughSubject<(ArticleDisplayData, [ArticleParagraphDisplayData]), Never>] = [:]
+    private var articleDetailSubjects: [String: PassthroughSubject<(ArticleData, [ParagraphData]), Never>] = [:]
     
     private var articleDetailNotificationTokens: [String: Set<NotificationToken>] = [:] // 存储每个文章详情的NotificationToken
     
@@ -99,7 +105,7 @@ class ArticleManager: ObservableObject {
         }
     }
     
-    func getArticleDetailPublisher(for articleUUID: String) -> AnyPublisher<(ArticleDisplayData, [ArticleParagraphDisplayData]), Never> {
+    func getArticleDetailPublisher(for articleUUID: String) -> AnyPublisher<(ArticleData, [ParagraphData]), Never> {
         if articleDetailSubjects[articleUUID] == nil {
             articleDetailSubjects[articleUUID] = PassthroughSubject()
             // 首次获取时，立即加载数据并发布
@@ -122,7 +128,7 @@ class ArticleManager: ObservableObject {
         
         if let article = realm.object(ofType: ArticleModel.self, forPrimaryKey: articleUUID) {
             // 观察文章本身的变化 (全局语音设置、paragraphUUIDs)
-            let articleToken = article.observe(keyPaths: ["name", "text", "updateTime", "voiceValue", "speedValue", "pitchValue", "styleValue", "paragraphUUIDs"]) { [weak self] change in
+            let articleToken = article.observe(keyPaths: ["name", "updateTime", "voiceValue", "speedValue", "pitchValue", "styleValue", "paragraphUUIDs"]) { [weak self] change in
                 if let self = self {
                     DispatchQueue.main.async {
                         self.loadAndPublishArticleDetailData(for: articleUUID)
@@ -158,12 +164,12 @@ class ArticleManager: ObservableObject {
               let articleInRealm = realm.object(ofType: ArticleModel.self, forPrimaryKey: articleUUID),
               let subject = articleDetailSubjects[articleUUID] else { return }
         
-        let articleDisplayData = ArticleDisplayData(
+        let articleData = ArticleData(
             id: articleInRealm.uuid,
             name: articleInRealm.name,
             createTime: articleInRealm.createTime,
             updateTime: articleInRealm.updateTime,
-            globalVoiceOptions: ArticleGlobalVoiceOptions(
+            voiceOptions: VoiceOptions(
                 voiceValue: articleInRealm.voiceValue,
                 speedValue: articleInRealm.speedValue,
                 pitchValue: articleInRealm.pitchValue,
@@ -171,29 +177,22 @@ class ArticleManager: ObservableObject {
             )
         )
         
-        var paragraphsDisplayData: [ArticleParagraphDisplayData] = []
+        var paragraphsData: [ParagraphData] = []
         for paragraphUUID in articleInRealm.paragraphUUIDs {
             if let paragraph = realm.object(ofType: ParagraphModel.self, forPrimaryKey: paragraphUUID) {
                 let allVoicesForParagraph = Array(paragraph.voices)
-                let matchedVoice = allVoicesForParagraph.first { voice in
-                    voice.voiceValue == articleInRealm.voiceValue &&
-                    voice.speedValue == articleInRealm.speedValue &&
-                    voice.pitchValue == articleInRealm.pitchValue &&
-                    voice.styleValue == articleInRealm.styleValue
-                }
-                paragraphsDisplayData.append(ArticleParagraphDisplayData(
+                paragraphsData.append(ParagraphData(
                     paragraph: paragraph.thaw() ?? paragraph, // 使用thaw()获取可管理对象，或直接传递Realm对象
-                    articleMatchedVoice: matchedVoice?.thaw() ?? matchedVoice,
                     allVoicesForParagraph: allVoicesForParagraph.compactMap { $0.thaw() ?? $0 }
                 ))
             }
         }
         
-        subject.send((articleDisplayData, paragraphsDisplayData))
+        subject.send((articleData, paragraphsData))
     }
     
     /// 更新文章的全局语音设置
-    func updateArticleGlobalVoiceOptions(articleUUID: String, newOptions: ArticleGlobalVoiceOptions) {
+    func updateArticleGlobalVoiceOptions(articleUUID: String, newOptions: VoiceOptions) {
         guard let realm = realm else { return }
         do {
             try realm.write {
@@ -235,27 +234,27 @@ class ArticleManager: ObservableObject {
             }
         }
     }
-    func getParagraphViewData(for article: ArticleModel) -> [ParagraphViewData] {
-        guard let realm = realm else { return [] }
-        
-        // 安全检查，确保文章对象有效
-        if article.isInvalidated {
-            return []
-        }
-        
-        return article.paragraphUUIDs.compactMap { uuid in
-            guard let paragraph = realm.object(ofType: ParagraphModel.self, forPrimaryKey: uuid),
-                  !paragraph.isInvalidated else {
-                return nil
-            }
-            
-            return ParagraphViewData(
-                id: paragraph.uuid,
-                text: paragraph.text,
-                createTime: paragraph.createTime,
-                voiceCount: paragraph.voices.count
-            )
-        }
-    }
+//    func getParagraphViewData(for article: ArticleModel) -> [ParagraphViewData] {
+//        guard let realm = realm else { return [] }
+//        
+//        // 安全检查，确保文章对象有效
+//        if article.isInvalidated {
+//            return []
+//        }
+//        
+//        return article.paragraphUUIDs.compactMap { uuid in
+//            guard let paragraph = realm.object(ofType: ParagraphModel.self, forPrimaryKey: uuid),
+//                  !paragraph.isInvalidated else {
+//                return nil
+//            }
+//            
+//            return ParagraphViewData(
+//                id: paragraph.uuid,
+//                text: paragraph.text,
+//                createTime: paragraph.createTime,
+//                voiceCount: paragraph.voices.count
+//            )
+//        }
+//    }
 }
 

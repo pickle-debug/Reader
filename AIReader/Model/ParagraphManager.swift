@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 class ParagraphManager: ObservableObject {
-    @Published var paragraphs: [ParagraphViewData] = []
+    @Published var paragraphs: [ParagraphData] = []
     
     static let shared = ParagraphManager()
     
@@ -53,11 +53,7 @@ class ParagraphManager: ObservableObject {
                 ])
 
           self.paragraphs = results.map {
-              ParagraphViewData(
-                  id: $0.uuid,
-                  text: $0.text,
-                  createTime: $0.createTime,
-                  voiceCount: $0.voices.count
+              ParagraphData(paragraph: $0, allVoicesForParagraph: $0.voices.compactMap { $0.thaw() ?? $0 }
               )
           }
       }
@@ -119,6 +115,4 @@ class ParagraphManager: ObservableObject {
             }
         }
     }
-
-
 }

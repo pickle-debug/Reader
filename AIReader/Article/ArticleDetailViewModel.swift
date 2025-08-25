@@ -5,9 +5,7 @@ import SwiftUI
 
 class ArticleDetailViewModel: ObservableObject {
     @Published var article: ArticleModel
-    @Published var paragraphs: [ParagraphViewData] = []
-    @Published var articleGlobalVoiceOptions: ArticleGlobalVoiceOptions // 新增，用于传递文章全局设置
-
+    @Published var paragraphs: [ParagraphData] = []
     @ObservedObject var articleManager = ArticleManager.shared
     @ObservedObject var paragraphManager = ParagraphManager.shared
     
@@ -15,12 +13,6 @@ class ArticleDetailViewModel: ObservableObject {
     
     init(article: ArticleModel) {
         self.article = article
-        self.articleGlobalVoiceOptions = ArticleGlobalVoiceOptions(
-                    voiceValue: article.voiceValue,
-                    speedValue: article.speedValue,
-                    pitchValue: article.pitchValue,
-                    styleValue: article.styleValue
-                )
         setupObservers()
         loadParagraphs()
     }
@@ -44,7 +36,7 @@ class ArticleDetailViewModel: ObservableObject {
         let articleParagraphUUIDs = Array(article.paragraphUUIDs)
         
         paragraphs = articleParagraphUUIDs.compactMap { uuid in
-            paragraphManager.paragraphs.first { $0.id == uuid }
+            paragraphManager.paragraphs.first { $0.paragraph.uuid == uuid }
         }
     }
     

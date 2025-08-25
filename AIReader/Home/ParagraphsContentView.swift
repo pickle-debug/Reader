@@ -21,16 +21,13 @@ struct ParagraphsContentView: View {
         } else {
             List {
                 ForEach(viewModel.paragraphs) { p in
-                    ParagraphCardView( // 你的卡片内容，不要再放“···”按钮
-                        id: p.id,
-                        text: p.text,
-                    )
+                    ParagraphCardView(text: p.paragraph.text)
                     .listRowBackground(Color.clear)
                     .listRowSeparator(.hidden)
 
                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                         Button(role: .destructive) {
-                            viewModel.deleteParagraph(uuid: p.id)
+                            viewModel.deleteParagraph(uuid: p.paragraph.uuid)
                         } label: {
                             Label("删除", systemImage: "trash")
                         }
@@ -45,7 +42,6 @@ struct ParagraphsContentView: View {
 }
 // 段落卡片视图
 struct ParagraphCardView: View {
-    let id: String
     let text: String
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {

@@ -2,15 +2,9 @@ import Foundation
 import SwiftUI
 import RealmSwift
 import Combine
-struct ParagraphViewData: Identifiable, Equatable {
-    let id: String
-    let text: String
-    let createTime: Date
-    let voiceCount: Int
-}
 class HomeViewModel: ObservableObject {
     @Published var articles: [ArticleModel] = []
-    @Published var paragraphs: [ParagraphViewData] = []
+    @Published var paragraphs: [ParagraphData] = []
     @Published var selectedArticle: ArticleModel?
     @Published var currentView: ContentType = .paragraphs
 
@@ -24,14 +18,23 @@ class HomeViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     init() {
-        // 关键：订阅 managers 的发布者
         paragraphManager.$paragraphs
             .receive(on: DispatchQueue.main)
             .assign(to: &$paragraphs)
-
+        // 订阅文章列表
         articleManager.$articles
             .receive(on: DispatchQueue.main)
             .assign(to: &$articles)
+        
+        $selectedArticle
+            .compactMap { $0?.uuid } // 获取文章UUID
+            .flatMap { [weak self] articleUUID in
+                // 订阅该文章的详细数据流
+                self?.articleManager.getArticleDetailPublisher(for: articleUUID) ?? Empty().eraseToAnyPublisher()
+            }
+            .map { _, paragraphsData in paragraphsData } // 只取段落数据部分
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$paragraphs)
     }
 
     func selectArticle(_ article: ArticleModel) {
@@ -54,7 +57,7 @@ class HomeViewModel: ObservableObject {
         var copy = paragraphs
         copy.move(fromOffsets: source, toOffset: destination)
         paragraphs = copy
-        paragraphManager.updateOrder(by: copy.map { $0.id })
+        paragraphManager.updateOrder(by: copy.map { $0.paragraph.uuid })
     }
 
 }
